@@ -3,3 +3,8 @@ export interface IUser {
   password:string;
   index: number;
 }
+
+export interface IRoom {
+  roomId: number;
+  roomUsers: Omit<IUser, 'password'>[];
+}

@@ -3,7 +3,7 @@ export const incomingParser = (mess: Buffer): unknown => {
   try {
     const data = JSON.parse(out.data);
     return { ...out, data };
-  } catch {
+  } catch  {
     return { ...out };
   }
 };

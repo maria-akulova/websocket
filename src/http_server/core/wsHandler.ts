@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import http from 'http';
 import { hostname } from 'os';
-import { incomingParser } from '../helpers/parsers';
+import { incomingParser, outgoingParser } from '../helpers/parsers';
 import { IncomingMessageRegistration, MessageTemplate } from '../entities/interface/message';
 import { Actions } from '../entities/interface/common';
 import { ActionResolver } from './actions';
@@ -16,11 +16,22 @@ export function onConnect(wsClient: WebSocket, req: http.IncomingMessage) {
   wsClient.on('message', (message: Buffer) => {
     const inc = incomingParser(message) as MessageTemplate;
     console.log(`recieved ${inc.type} from ${key}`);
+    let res: unknown;
+
     switch (inc.type) {
       case Actions.reg:
-        ActionResolver.register(inc.data as IncomingMessageRegistration, key);
+        res = ActionResolver.register(inc.data as IncomingMessageRegistration, key);
+        wsClient.send(outgoingParser({ type: inc.type, id: inc.id, data: JSON.stringify(res) }));
+        wsClient.send(
+          outgoingParser({ type: Actions.u_room, id: inc.id, data: JSON.stringify(ActionResolver.rooms) })
+        );
         break;
-
+      case Actions.c_room:
+        res = ActionResolver.addRoom(key);
+        connections.forEach((c) => {
+          c.send(outgoingParser({ type: Actions.u_room, id: inc.id, data: JSON.stringify(res) }));
+        });
+        break;
       
       default:
         break;

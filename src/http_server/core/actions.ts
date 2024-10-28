@@ -1,4 +1,6 @@
 import { USERS_DB } from '../../DB/users';
+import { ROOM_DB } from '../../DB/rooms';
+
 import { IncomingMessageRegistration, OutgoingMessageRegistration } from '../entities/interface/message';
 import { validateUser } from '../entities/validator';
 export class ActionResolver {
@@ -6,6 +8,10 @@ export class ActionResolver {
 
   static decrementId() {
     return ++this.id;
+  }
+
+  static get rooms() {
+    return Object.values(ROOM_DB);
   }
 
   static register(mes: IncomingMessageRegistration, socketId: string): OutgoingMessageRegistration {
@@ -18,6 +24,21 @@ export class ActionResolver {
   }
 
   static logout(id: string): void {
-    delete USERS_DB[id];
+    delete ROOM_DB[id];
+  }
+
+  static addRoom(key: string) {
+    const user = { name: USERS_DB[key].name, index: USERS_DB[key].index };
+    const room = {
+      roomId: user.index,
+      roomUsers: [
+        {
+          name: user.name,
+          index: user.index,
+        },
+      ],
+    };
+    ROOM_DB[key] = room;
+    return ActionResolver.rooms;
   }
 }
