@@ -1,3 +1,5 @@
+import { Ship } from "../http_server/entities/interface/message";
+
 export interface IUser {
   name: string;
   password:string;
@@ -22,9 +24,10 @@ export interface IWinner {
 export interface IGame {
   idGame: number;
   users: {
-    [key: number]: string[];
-  };
+    [key: number]: Ship[];  };
   grid: {
     [key: number]: [][];
   };
+  
 }
+

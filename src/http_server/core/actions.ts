@@ -3,7 +3,7 @@ import { ROOM_DB } from '../../DB/rooms';
 import { GAME_DB } from '../../DB/games';
 
 
-import { IncomingMessageAddToRoom, IncomingMessageRegistration, OutgoingMessageCreateGame, OutgoingMessageRegistration } from '../entities/interface/message';
+import { IncomingMessageAddShips, IncomingMessageAddToRoom, IncomingMessageRegistration, OutgoingMessageCreateGame, OutgoingMessageRegistration } from '../entities/interface/message';
 import { validateUser } from '../entities/validator';
 export class ActionResolver {
   static id = 1;
@@ -30,15 +30,11 @@ export class ActionResolver {
   }
 
   static addRoom(key: string) {
-    const user = { name: USERS_DB[key].name, index: USERS_DB[key].index };
+    const user = USERS_DB[key];
     const room = {
       roomId: user.index,
-      roomUsers: [
-        {
-          name: user.name,
-          index: user.index,
-        },
-      ],
+      roomUsers: [user],
+
     };
     ROOM_DB[key] = room;
     return ActionResolver.rooms;
@@ -61,12 +57,25 @@ export class ActionResolver {
         [room.roomId]: [],
       };
       const u = ActionResolver.getCurrUsers(Object.keys(usersInGame));
-
+      
       GAME_DB[room.roomId] = { idGame: room.roomId!, users: usersInGame, grid: {} };
-      delete ROOM_DB[ind];
+      delete ROOM_DB[ind];      delete ROOM_DB[ind];
       return [GAME_DB[room.roomId!], u];
     } else {
       throw new Error('Room is undefined.');
+    }
+  }
+  static addShips(data: IncomingMessageAddShips): boolean {
+    try {
+      const game = GAME_DB[data.gameId];
+      game.users[data.indexPlayer] = data.ships;
+      console.log("🚀 ~ file: actions.ts:61 ~ ActionResolver ~ addShips ~ game.users:", game.users)
+      if (Object.values(game.users).every(u => u.length)) {
+        return true;
+      }
+      return false;
+    } catch  {
+      return false;
     }
   }
 
