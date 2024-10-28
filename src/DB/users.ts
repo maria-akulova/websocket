@@ -1,2 +1,3 @@
-import { IUser } from "./interface";
-export const USERS_DB: IUser[] = [];
+import { IUser } from './interface';
+
+export const USERS_DB: { [key: string]: IUser } = {};
