@@ -1,0 +1,45 @@
+{
+    "name": "ws_battleship",
+    "version": "1.0.0",
+    "description": "RSS task: websocket battleship",
+    "author": "maria-akulova",
+    "main": "index.js",
+    "engines": {
+        "node": ">=22.9.0"
+    },
+    "scripts": {
+        "build": "webpack",
+        "start:dev": "ts-node-dev index.ts",
+        "start": "webpack && node dist",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "lint": "eslint \"src/**/*.ts\" --fix",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "license": "ISC",
+    "devDependencies": {
+        "@eslint/js": "^9.12.0",
+        "@types/node": "^20.3.3",
+        "@types/uuid": "^10.0.0",
+        "@types/webpack": "^5.28.5",
+        "@types/ws": "^8.5.5",
+        "@typescript-eslint/eslint-plugin": "^8.10.0",
+        "eslint": "^9.12.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-jest": "^28.8.3",
+        "eslint-webpack-plugin": "^4.2.0",
+        "globals": "^15.11.0",
+        "prettier": "^3.3.3",
+        "ts-loader": "^9.5.1",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.6.3",
+        "typescript-eslint": "^8.10.0",
+        "webpack": "^5.95.0",
+        "webpack-cli": "^5.1.4"
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "ws": "^8.8.0"
+    }
+}
