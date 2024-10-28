@@ -1,4 +1,4 @@
-import { Ship } from "../http_server/entities/interface/message";
+import { Grid, Ship } from "../http_server/entities/interface/message";
 
 export interface IUser {
   name: string;
@@ -26,7 +26,7 @@ export interface IGame {
   users: {
     [key: number]: Ship[];  };
   grid: {
-    [key: number]: [][];
+    [key: number]: Grid;
   };
   
 }

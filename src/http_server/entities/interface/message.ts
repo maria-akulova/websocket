@@ -1,16 +1,16 @@
 import { Actions } from './common';
 
+// IncomingMessage interfaces and types
 export interface IncomingMessageRegistration {
   name: string;
   password: string;
 }
 
-export interface OutgoingMessageRegistration {
-  name: string;
-  index: number;
-  error: boolean;
-  errorText: string;
+export interface IncomingMessageAddToRoom {
+  indexRoom: number;
 }
+
+export type IncomingMessageCreateRoom = '';
 
 export interface IncomingMessageAddShips {
   gameId: number;
@@ -18,28 +18,51 @@ export interface IncomingMessageAddShips {
   indexPlayer: number;
 }
 
+export interface IncomingMessageAttack {
+  gameId: number;
+  x: number;
+  y: number;
+  indexPlayer: number;
+}
+
+export interface IncomingMessageRandomAttack {
+  gameId: number;
+  indexPlayer: number;
+}
+
+// OutgoingMessage interfaces and types
+export interface OutgoingMessageRegistration {
+  name: string;
+  index: number;
+  error: boolean;
+  errorText: string;
+}
+
+export interface OutgoingMessageCreateGame {
+  idGame: number;
+}
+
+export interface OutgoingMessageStartGame {
+  ships: Ship[];
+  currentPlayerIndex: number;
+}
+
+export interface OutgoingMessageAttack {
+  position: Coord;
+  currentPlayer: number /* id of the player in the current game */;
+  status: AttackStatus;
+}
+
+export interface OutgoingMessageTurn {
+  currentPlayer: number;
+}
+
+// Other types and interfaces
 export interface MessageTemplate<T = unknown> {
   type: Actions;
   data: T;
   id: 0;
 }
-export interface IncomingMessageAddToRoom {
-  indexRoom: number;
-}
-export interface OutgoingMessageCreateGame {
-  idGame: number;
-}
-export interface AddToRoom {
-  indexRoom: number;
-}
-
-export interface CreateGame {
-  idGame: number;
-  idPlayer: number;
-}
-
-export type IncomingMessageCreateRoom = '';
-export type CreateRoom = '';
 
 export interface Ship {
   position: Coord;
@@ -56,32 +79,12 @@ export type Coord = {
   y: number;
 };
 
-export interface IncomingMessageAttack {
-  gameId: number;
-  x: number;
-  y: number;
-  indexPlayer: number;
+export enum Cell {
+  default,
+  ship,
+  empty,
+  shot,
+  kill,
 }
 
-export interface AddShips {
-  gameId: number;
-  ships: Ship[];
-  indexPlayer: number;
-}
-
-export interface StartGame {
-  ships: Ship[];
-  currentPlayerIndex: number;
-}
-
-export interface Ship {
-  position: { x: number; y: number };
-  direction: boolean;
-  length: number;
-  type: ShipType;
-}
-
-export interface OutgoingMessageStartGame {
-  ships: Ship[];
-  currentPlayerIndex: number;
-}
+export type Grid = Cell[][];

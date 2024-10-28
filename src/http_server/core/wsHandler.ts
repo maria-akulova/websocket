@@ -5,7 +5,7 @@ import { incomingParser, outgoingParser } from '../helpers/parsers';
 import { MessageTemplate } from '../entities/interface/message';
 import { Actions } from '../entities/interface/common';
 import { ActionResolver } from './actions';
-import { addShips, addToRoom, createRoom, reg } from './response';
+import { addShips, addToRoom, attack, createRoom, reg } from './response';
 
 
 export const connections = new Map();
@@ -44,6 +44,10 @@ export function onConnect(wsClient: WebSocket, req: http.IncomingMessage) {
           addShips(wsClient, message, key);
 
             break;
+            case Actions.attack:
+              attack(wsClient, message, key);
+              break;
+
       default:
         break;
     }
