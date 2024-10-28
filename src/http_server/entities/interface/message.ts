@@ -17,3 +17,17 @@ export interface MessageTemplate<T = unknown> {
   data: T;
   id: 0;
 }
+export interface IncomingMessageAddToRoom {
+  indexRoom: number;
+}
+export interface OutgoingMessageCreateGame {
+  idGame: number;
+}
+export interface AddToRoom {
+  indexRoom: number;
+}
+
+export interface CreateGame {
+  idGame: number;
+  idPlayer: number;
+}
