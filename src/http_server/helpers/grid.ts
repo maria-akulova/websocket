@@ -1,4 +1,5 @@
 import { AttackStatus, Coord, Grid, Ship, Cell } from '../entities/interface/message';
+import { SHIP_GRIDS } from './ships';
 
 export const createGrid = (ships: Ship[]): Grid => {
   const grid: Grid = [];
@@ -96,4 +97,7 @@ export const arroudKill = (grid: Grid, coord: Coord): [Coord[], Coord[]] => {
   return [res, allIn];
 };
 
-
+export const placeRandom = (): Grid => {
+  const i = Math.floor(Math.random() * (SHIP_GRIDS.length - 1));
+  return SHIP_GRIDS[i];
+};

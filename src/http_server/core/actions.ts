@@ -1,19 +1,21 @@
 import { GAME_DB, WINNERS } from '../../DB/games';
 import { ROOM_DB } from '../../DB/rooms';
 import { USERS_DB } from '../../DB/users';
+import { BOT_INDEX_PLUS } from '../entities/constants';
 import {
   Coord,
   IncomingMessageRegistration,
   OutgoingMessageRegistration,
   OutgoingMessageCreateGame,
+  OutgoingMessageAttack,
   IncomingMessageAddShips,
   IncomingMessageAttack,
   Ship,
+  Cell,
   IncomingMessageAddToRoom,
-  OutgoingMessageAttack,
 } from '../entities/interface/message';
 import { validateUser } from '../entities/validator';
-import { createGrid, shot } from '../helpers/grid';
+import { createGrid, placeRandom, shot } from '../helpers/grid';
 
 export class ActionResolver {
   static get rooms() {
@@ -108,9 +110,16 @@ export class ActionResolver {
     let x = random ? Math.floor(Math.random() * 10) : data.x;
     let y = random ? Math.floor(Math.random() * 10) : data.y;
 
+    if (
+      !random &&
+      (secondUser[y][x] === Cell.shot || secondUser[y][x] === Cell.empty || secondUser[y][x] === Cell.kill)
+    ) {
+      return {};
+    }
 
     while (
-      random 
+      random &&
+      (secondUser[y][x] === Cell.kill || secondUser[y][x] === Cell.shot || secondUser[y][x] === Cell.empty)
     ) {
       x = Math.floor(Math.random() * 10);
       y = Math.floor(Math.random() * 10);
@@ -148,9 +157,10 @@ export class ActionResolver {
     const user = USERS_DB[socketId];
     const game = {
       idGame: user.index,
-      users: { [user.index]: [], [user.index]: [{} as Ship] },
-      grid: { [user.index]: ()=> {}},
+      users: { [user.index]: [], [user.index + BOT_INDEX_PLUS]: [{} as Ship] },
+      grid: { [user.index + BOT_INDEX_PLUS]: placeRandom() },
     };
+    GAME_DB[user.index] = game;
     if (ROOM_DB[user.index]) {
       delete ROOM_DB[user.index];
     }

@@ -14,6 +14,7 @@ import { connections } from './wsHandler';
 import { WINNERS } from '../../DB/games';
 import { getUsersShips } from '../helpers/getters';
 import { USERS_DB } from '../../DB/users';
+import { BOT_INDEX_PLUS } from '../entities/constants';
 
 export const reg = (ws: WebSocket, message: Buffer, key: string): void => {
   const inc = incomingParser(message) as MessageTemplate<IncomingMessageRegistration>;
@@ -141,7 +142,7 @@ export const attack = (ws: WebSocket, message: Buffer, key: string, random = fal
   }
 
   // if bot attack
-  if (nextUser!  > 0) {
+  if (nextUser! - BOT_INDEX_PLUS > 0) {
     console.log('BOT ATTACK');
     const mess: IncomingMessageAttack = {
       ...inc.data,
